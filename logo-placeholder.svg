@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">
+
+  <!-- Fundo escuro com borda neon -->
+  <rect width="36" height="36" rx="8" fill="#0A0A0A"/>
+  <rect x="1" y="1" width="34" height="34" rx="7"
+        fill="none" stroke="#00D4FF" stroke-width="1.5" opacity="0.6"/>
+
+  <!-- Corpo da vending machine -->
+  <rect x="8" y="5" width="20" height="27" rx="3"
+        fill="none" stroke="#00D4FF" stroke-width="1.5"/>
+
+  <!-- Produtos linha 1 -->
+  <rect x="11" y="9"  width="6" height="5" rx="1"
+        fill="#00D4FF" opacity="0.8"/>
+  <rect x="19" y="9"  width="6" height="5" rx="1"
+        fill="#00D4FF" opacity="0.8"/>
+
+  <!-- Produtos linha 2 -->
+  <rect x="11" y="16" width="6" height="5" rx="1"
+        fill="#00D4FF" opacity="0.45"/>
+  <rect x="19" y="16" width="6" height="5" rx="1"
+        fill="#00D4FF" opacity="0.45"/>
+
+  <!-- Bandeja de entrega -->
+  <rect x="11" y="24" width="14" height="4" rx="1"
+        fill="#00D4FF" opacity="0.2"/>
+
+  <!-- Ponto de luz (indicador ligado) -->
+  <circle cx="28" cy="8" r="1.5" fill="#00D4FF" opacity="0.9"/>
+
+</svg>

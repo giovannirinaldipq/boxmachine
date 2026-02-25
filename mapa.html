@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mapa de Pontos — Box Machine</title>
+  <meta name="description" content="Veja onde estão as máquinas Box Machine espalhadas pelo Brasil. Encontre o ponto mais próximo de você ou cadastre um novo local." />
+  <link rel="canonical" href="https://boxmachine.com.br/mapa.html" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/styles.css" />
+
+  <style>
+    .mapa-wrapper {
+      position: relative;
+      width: 100%;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      background: var(--bg-card);
+    }
+
+    .mapa-wrapper iframe {
+      width: 100%;
+      height: 520px;
+      border: 0;
+      display: block;
+      filter: grayscale(30%) invert(92%) hue-rotate(180deg) brightness(0.85);
+    }
+
+    .mapa-overlay-label {
+      position: absolute;
+      top: var(--space-md);
+      left: var(--space-md);
+      background: rgba(0, 0, 0, 0.85);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      border-radius: var(--radius-md);
+      padding: 0.5rem 0.85rem;
+      font-size: var(--text-xs);
+      color: var(--neon-primary);
+      font-family: var(--font-title);
+      letter-spacing: 0.05em;
+      pointer-events: none;
+    }
+
+    .pontos-lista {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      max-height: 520px;
+      overflow-y: auto;
+      padding-right: 0.5rem;
+    }
+
+    .pontos-lista::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .pontos-lista::-webkit-scrollbar-track {
+      background: var(--bg-card);
+    }
+
+    .pontos-lista::-webkit-scrollbar-thumb {
+      background: rgba(0, 212, 255, 0.3);
+      border-radius: 2px;
+    }
+
+    .ponto-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: var(--space-md);
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .ponto-item:hover,
+    .ponto-item.active {
+      border-color: var(--neon-primary);
+      background: rgba(0, 212, 255, 0.05);
+    }
+
+    .ponto-item-header {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .ponto-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--neon-primary);
+      flex-shrink: 0;
+      box-shadow: 0 0 6px var(--neon-primary);
+    }
+
+    .ponto-nome {
+      font-weight: 600;
+      font-size: var(--text-sm);
+      color: var(--text-primary);
+      margin: 0;
+    }
+
+    .ponto-cidade {
+      font-size: var(--text-xs);
+      color: var(--text-disabled);
+      margin: 0;
+      padding-left: 1.1rem;
+    }
+
+    .ponto-tipo {
+      display: inline-block;
+      font-size: 10px;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      background: rgba(0, 212, 255, 0.1);
+      color: var(--neon-primary);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      margin-top: 0.4rem;
+      margin-left: 1.1rem;
+    }
+
+    .faq-filter {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 0.5rem 1.1rem;
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: var(--font-body);
+    }
+
+    .faq-filter:hover,
+    .faq-filter.active {
+      border-color: var(--neon-primary);
+      color: var(--neon-primary);
+      background: rgba(0, 212, 255, 0.05);
+    }
+
+    @media (max-width: 768px) {
+      .mapa-wrapper iframe {
+        height: 320px;
+      }
+      .pontos-lista {
+        max-height: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar" id="navbar" aria-label="Menu principal">
+    <div class="container">
+      <div class="navbar-inner">
+        <a href="/index.html" class="navbar-logo" aria-label="Box Machine - Página inicial">
+          <img src="/assets/logo-placeholder.svg" alt="Logo Box Machine" />
+          Box<span>Machine</span>
+        </a>
+
+        <ul class="nav-links" role="list">
+          <li><a href="/sobre.html">Sobre</a></li>
+          <li><a href="/solucoes.html">Soluções</a></li>
+          <li><a href="/parceria.html">Parceria</a></li>
+          <li><a href="/mapa.html" class="active">Mapa de Pontos</a></li>
+          <li><a href="/faq.html">FAQ</a></li>
+          <li><a href="/contato.html">Contato</a></li>
+          <li class="nav-cta">
+            <a href="/compra.html" class="btn btn-primary btn-sm">Solicitar Proposta</a>
+          </li>
+        </ul>
+
+        <button class="hamburger" id="hamburger"
+                aria-label="Abrir menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+
+      <div class="mobile-menu" id="mobileMenu" role="navigation">
+        <a href="/sobre.html">Sobre</a>
+        <a href="/solucoes.html">Soluções</a>
+        <a href="/parceria.html">Parceria</a>
+        <a href="/mapa.html">Mapa de Pontos</a>
+        <a href="/faq.html">FAQ</a>
+        <a href="/contato.html">Contato</a>
+        <a href="/compra.html" class="btn btn-primary btn-sm mt-sm">Solicitar Proposta</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== PAGE HEADER ===== -->
+  <div class="page-header">
+    <div class="container">
+      <p class="section-label">Nossa rede</p>
+      <h1>Mapa de Pontos</h1>
+      <p>
+        Veja onde estão as máquinas Box Machine espalhadas pelo Brasil.
+        Mais de 200 pontos ativos em 50 cidades e crescendo todo mês.
+      </p>
+    </div>
+  </div>
+
+  <!-- ===== STATS ===== -->
+  <section style="padding:var(--space-xl) 0;
+                  border-bottom:1px solid var(--border-subtle);">
+    <div class="container">
+      <div class="grid-4">
+
+        <div style="text-align:center;">
+          <div style="font-family:var(--font-title); font-size:2.5rem;
+                      color:var(--neon-primary); line-height:1;
+                      margin-bottom:0.4rem;">200+</div>
+          <p style="font-size:var(--text-sm); color:var(--text-muted); margin:0;">
+            Máquinas ativas
+          </p>
+        </div>
+
+        <div style="text-align:center;">
+          <div style="font-family:var(--font-title); font-size:2.5rem;
+                      color:var(--neon-primary); line-height:1;
+                      margin-bottom:0.4rem;">50+</div>
+          <p style="font-size:var(--text-sm); color:var(--text-muted); margin:0;">
+            Cidades atendidas
+          </p>
+        </div>
+
+        <div style="text-align:center;">
+          <div style="font-family:var(--font-title); font-size:2.5rem;
+                      color:var(--neon-primary); line-height:1;
+                      margin-bottom:0.4rem;">15+</div>
+          <p style="font-size:var(--text-sm); color:var(--text-muted); margin:0;">
+            Estados com cobertura
+          </p>
+        </div>
+
+        <div style="text-align:center;">
+          <div style="font-family:var(--font-title); font-size:2.5rem;
+                      color:var(--neon-primary); line-height:1;
+                      margin-bottom:0.4rem;">24h</div>
+          <p style="font-size:var(--text-sm); color:var(--text-muted); margin:0;">
+            Operação contínua
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MAPA + LISTA ===== -->
+  <section class="section" aria-labelledby="mapa-title">
+    <div class="container">
+
+      <h2 id="mapa-title" class="sr-only">Mapa de Pontos Box Machine</h2>
+
+      <!-- Filtros -->
+      <div style="display:flex; flex-wrap:wrap; gap:var(--space-sm);
+                  margin-bottom:var(--space-lg);">
+        <button class="faq-filter active" data-estado="todos">
+          Todos os estados
+        </button>
+        <button class="faq-filter" data-estado="SP">São Paulo</button>
+        <button class="faq-filter" data-estado="RJ">Rio de Janeiro</button>
+        <button class="faq-filter" data-estado="MG">Minas Gerais</button>
+        <button class="faq-filter" data-estado="PR">Paraná</button>
+        <button class="faq-filter" data-estado="RS">Rio Grande do Sul</button>
+        <button class="faq-filter" data-estado="SC">Santa Catarina</button>
+      </div>
+
+      <div class="grid-2" style="gap:var(--space-lg); align-items:start;">
+
+        <!-- MAPA -->
+        <div>
+          <div class="mapa-wrapper">
+            <div class="mapa-overlay-label">● REDE BOX MACHINE — AO VIVO</div>
+
+            <!--
+              INSTRUÇÃO: Substitua o src do iframe abaixo pelo link
+              gerado no Google Maps.
+
+              Como gerar:
+              1. Acesse maps.google.com
+              2. Busque sua cidade ou endereço principal
+              3. Clique no menu (≡) > Compartilhar ou incorporar mapa
+              4. Clique em "Incorporar um mapa"
+              5. Copie o src que aparecer no código gerado
+              6. Cole aqui substituindo o src abaixo
+
+              O src padrão abaixo aponta para São Paulo como exemplo.
+            -->
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.0754761256627!2d-46.6565!3d-23.5646!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce59c8da0aa315%3A0xd59f9431f2c9776a!2sAv.%20Paulista%2C%20S%C3%A3o%20Paulo%20-%20SP!5e0!3m2!1spt-BR!2sbr!4v1700000000000"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Mapa de pontos Box Machine">
+            </iframe>
+          </div>
+
+          <p style="font-size:var(--text-xs); color:var(--text-disabled);
+                    margin-top:var(--space-sm); text-align:center;">
+            Mapa atualizado mensalmente. Novos pontos são adicionados
+            toda semana.
+          </p>
+        </div>
+
+        <!-- LISTA DE PONTOS -->
+        <div>
+          <p style="font-size:var(--text-sm); color:var(--text-muted);
+                    margin-bottom:var(--space-md);">
+            Pontos em destaque — substitua pela sua lista real de pontos.
+          </p>
+
+          <div class="pontos-lista" id="pontosList">
+
+            <div class="ponto-item active" data-estado="SP">
+              <div class="ponto-item-header">
+                <div class="ponto-dot"></div>
+                <p class="ponto-nome">Academia BodyTech</p>
+              </div>
+              <p class="ponto-cidade">São Paulo — SP</p>
+              <span class="ponto-tipo">Academia</span>
+            </div>
+
+            <div class="ponto-item" data-estado="SP">
+              <div class="ponto-item-header">
+                <div class="ponto-dot"></div>
+                <p class="ponto-nome">Edifício Comercial Faria Lima</p>
+              </div>
+              <p class="ponto-cidade">São Paulo — SP</p>
+              <span class="ponto-tipo">Corporativo</span>
+            </div>
+
+            <div class="ponto-item" data-estado="SP">
+              <div class="ponto-item-header">
+                <div class="ponto-dot"></div>
+                <p class="ponto-nome">Universidade Mackenzie</p>
+              </div>
+              <p class="ponto-cidade">São Paulo — SP</p>
+              <span class="ponto-tipo">Educação</span>
+            </div>
+
+            <div class="ponto-item" data-estado="RJ">
+              <div class="ponto-item-header">
+                <div class="ponto-dot"></div>
+                <p class="ponto-nome">Clínica Oncológica RJ</p>
+              </div>
+              <p class="ponto-cidade">Rio de Janeiro — RJ</p>
+              <span class="ponto-tipo">Saúde</span>
+            </div>
+
+            <div class="ponto-item" data-estado="RJ">
+              <div class="ponto-item-header">
+                <div class="ponto-dot"></div>
+                <p class="ponto-nome">Shopping Botafogo Praia</p>
+              </div>
+              <p class="ponto-cidade">Rio de Janeiro — RJ</p>
+              <span class="ponto-tipo">Varejo</span>
+            </div>
+
+            <div class="ponto-item" data-estado="MG">
+              <div class="ponto-item-header">
+                <div class="ponto-dot"></div>
+                <p class="ponto-nome">Centro Empresarial BH</p>
+              </div>
+              <p class="ponto-cidade">Belo Horizonte — MG</p>
+              <span class="ponto-tipo">Corporativo</span>
+            </div>
+
+            <div class="ponto-item" data-estado="MG">
+              <div class="ponto-item-header">
+                <div class="ponto-dot"></div>
+                <p class="ponto-nome">PUC Minas — Campus Coração Eucarístico</p>
+              </div>
+              <p class="ponto-cidade">Belo Horizonte — MG</p>
+              <span class="ponto-tipo">Educação</span>
+            </div>
+
+            <div class="ponto-item" data-estado="PR">
+              <div class="ponto-item-header">
+                <div class="ponto-dot"></div>
+                <p class="ponto-nome">Condomínio Torres do Sol</p>
+              </div>
+              <p class="ponto-cidade">Curitiba — PR</p>
+              <span class="ponto-tipo">Condomínio</span>
+            </div>
+
+            <div class="ponto-item" data-estado="PR">
+              <div class="ponto-item-header">
+                <div class="ponto-dot"></div>
+                <p class="ponto-nome">Hospital Vita Curitiba</p>
+              </div>
+              <p class="ponto-cidade">Curitiba — PR</p>
+              <span class="ponto-tipo">Saúde</span>
+            </div>
+
+            <div class="ponto-item" data-estado="RS">
+              <div class="ponto-item-header">
+                <div class="ponto-dot"></div>
+                <p class="ponto-nome">Fiergs — Hub Industrial</p>
+              </div>
+              <p class="ponto-cidade">Porto Alegre — RS</p>
+              <span class="ponto-tipo">Corporativo</span>
+            </div>
+
+            <div class="ponto-item" data-estado="SC">
+              <div class="ponto-item-header">
+                <div class="ponto-dot"></div>
+                <p class="ponto-nome">Sapiens Parque Tecnológico</p>
+              </div>
+              <p class="ponto-cidade">Florianópolis — SC</p>
+              <span class="ponto-tipo">Tecnologia</span>
+            </div>
+
+          </div>
+
+          <div style="margin-top:var(--space-md); padding:var(--space-md);
+                      border:1px solid rgba(0,212,255,0.2);
+                      border-radius:var(--radius-md);
+                      background:rgba(0,212,255,0.04);
+                      text-align:center;">
+            <p style="font-size:var(--text-sm); color:var(--text-muted);
+                      margin:0 0 var(--space-sm);">
+              Não encontrou um ponto na sua cidade?
+            </p>
+            <a href="/parceria.html" class="btn btn-primary btn-sm">
+              Cadastrar meu ponto
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TIPOS DE PONTO ===== -->
+  <section class="section section-alt" aria-labelledby="tipos-title">
+    <div class="container">
+
+      <div class="section-header center">
+        <p class="section-label">Onde estamos</p>
+        <h2 class="section-title" id="tipos-title">
+          Os melhores locais para<br />uma vending machine
+        </h2>
+      </div>
+
+      <div class="grid-4">
+
+        <div class="card" style="text-align:center;">
+          <div class="feature-icon" style="margin:0 auto var(--space-sm);">
+            🏢
+          </div>
+          <h3 style="font-size:var(--text-base);">Corporativo</h3>
+          <p style="font-size:var(--text-sm);">
+            Escritórios e sedes com equipes grandes e rotina intensa.
+          </p>
+        </div>
+
+        <div class="card card-neon" style="text-align:center;">
+          <div class="feature-icon" style="margin:0 auto var(--space-sm);">
+            🏋️
+          </div>
+          <h3 style="font-size:var(--text-base);">Academias</h3>
+          <p style="font-size:var(--text-sm);">
+            Público ativo que busca praticidade antes e após o treino.
+          </p>
+        </div>
+
+        <div class="card" style="text-align:center;">
+          <div class="feature-icon" style="margin:0 auto var(--space-sm);">
+            🎓
+          </div>
+          <h3 style="font-size:var(--text-base);">Educação</h3>
+          <p style="font-size:var(--text-sm);">
+            Escolas e faculdades com alto volume de alunos circulando.
+          </p>
+        </div>
+
+        <div class="card" style="text-align:center;">
+          <div class="feature-icon" style="margin:0 auto var(--space-sm);">
+            🏥
+          </div>
+          <h3 style="font-size:var(--text-base);">Saúde</h3>
+          <p style="font-size:var(--text-sm);">
+            Clínicas e hospitais com fluxo constante de pessoas 24h.
+          </p>
+        </div>
+
+        <div class="card" style="text-align:center;">
+          <div class="feature-icon" style="margin:0 auto var(--space-sm);">
+            🏬
+          </div>
+          <h3 style="font-size:var(--text-base);">Varejo</h3>
+          <p style="font-size:var(--text-sm);">
+            Shoppings e centros comerciais com grande movimento diário.
+          </p>
+        </div>
+
+        <div class="card" style="text-align:center;">
+          <div class="feature-icon" style="margin:0 auto var(--space-sm);">
+            🏘️
+          </div>
+          <h3 style="font-size:var(--text-base);">Condomínios</h3>
+          <p style="font-size:var(--text-sm);">
+            Residenciais e comerciais com moradores e visitantes frequentes.
+          </p>
+        </div>
+
+        <div class="card" style="text-align:center;">
+          <div class="feature-icon" style="margin:0 auto var(--space-sm);">
+            🚌
+          </div>
+          <h3 style="font-size:var(--text-base);">Transporte</h3>
+          <p style="font-size:var(--text-sm);">
+            Rodoviárias, aeroportos e terminais com fluxo intenso.
+          </p>
+        </div>
+
+        <div class="card card-neon" style="text-align:center;">
+          <div class="feature-icon" style="margin:0 auto var(--space-sm);">
+            🏭
+          </div>
+          <h3 style="font-size:var(--text-base);">Indústria</h3>
+          <p style="font-size:var(--text-sm);">
+            Fábricas e galpões com turnos longos e pausas regulares.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="section" style="text-align:center;
+    background:radial-gradient(ellipse 60% 80% at 50% 50%,
+    rgba(0,212,255,0.07) 0%, transparent 70%), var(--bg-black);">
+    <div class="container">
+      <p class="section-label"
+         style="justify-content:center; display:flex;">
+        Expanda a rede
+      </p>
+      <h2 style="max-width:600px; margin:0 auto var(--space-sm);">
+        Quer ver sua cidade<br />no mapa?
+      </h2>
+      <p style="max-width:480px; margin:0 auto var(--space-xl);
+                font-size:var(--text-lg);">
+        Cadastre seu ponto ou solicite uma máquina para a sua região.
+        Nossa equipe avalia e retorna em até 48 horas.
+      </p>
+      <div class="flex justify-center flex-wrap gap-sm">
+        <a href="/parceria.html" class="btn btn-primary btn-lg">
+          Cadastrar meu Ponto
+        </a>
+        <a href="/compra.html" class="btn btn-outline btn-lg">
+          Solicitar uma Proposta
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+
+        <div class="footer-brand">
+          <a href="/index.html" class="navbar-logo"
+             style="margin-bottom:var(--space-sm); display:inline-flex;">
+            Box<span>Machine</span>
+          </a>
+          <p>
+            Tecnologia em venda automática para empresas e
+            investidores em todo o Brasil.
+          </p>
+        </div>
+
+        <div>
+          <p class="footer-heading">Soluções</p>
+          <div class="footer-links">
+            <a href="/compra.html">Compra de Máquina</a>
+            <a href="/aluguel.html">Aluguel de Máquina</a>
+            <a href="/parceria.html">Cadastrar Ponto</a>
+            <a href="/download.html">Apresentação PDF</a>
+          </div>
+        </div>
+
+        <div>
+          <p class="footer-heading">Empresa</p>
+          <div class="footer-links">
+            <a href="/sobre.html">Sobre nós</a>
+            <a href="/mapa.html">Mapa de Pontos</a>
+            <a href="/faq.html">FAQ</a>
+            <a href="/contato.html">Contato</a>
+          </div>
+        </div>
+
+        <div>
+          <p class="footer-heading">Legal</p>
+          <div class="footer-links">
+            <a href="/politica.html">Política de Privacidade</a>
+            <a href="/politica.html#lgpd">LGPD</a>
+            <a href="/politica.html#cookies">Cookies</a>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2025 Box Machine. Todos os direitos reservados.</p>
+        <p>CNPJ: XX.XXX.XXX/0001-XX</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== WHATSAPP FLUTUANTE ===== -->
+  <a href="https://wa.me/5500000000000?text=Olá!%20Vim%20pelo%20site%20Box%20Machine."
+     class="whatsapp-float" target="_blank" rel="noopener"
+     aria-label="Falar no WhatsApp">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+  </a>
+
+  <!-- JS -->
+  <script src="/js/main.js"></script>
+
+  <script>
+    // Filtro de pontos por estado
+    const filtros = document.querySelectorAll('.faq-filter[data-estado]');
+    const pontos  = document.querySelectorAll('.ponto-item[data-estado]');
+
+    filtros.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filtros.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const estado = btn.dataset.estado;
+        pontos.forEach(p => {
+          if (estado === 'todos' || p.dataset.estado === estado) {
+            p.style.display = 'block';
+          } else {
+            p.style.display = 'none';
+          }
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>

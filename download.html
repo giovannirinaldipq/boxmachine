@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Baixar Apresentação — Box Machine</title>
+  <meta name="description" content="Baixe gratuitamente a apresentação completa da Box Machine em PDF. Conheça nossas soluções, modelos de negócio e números em detalhes." />
+  <link rel="canonical" href="https://boxmachine.com.br/download.html" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/styles.css" />
+
+  <style>
+    .download-hero {
+      padding: var(--space-3xl) 0 var(--space-xl);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .download-hero-bg {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(
+        ellipse 70% 60% at 50% 0%,
+        rgba(0, 212, 255, 0.07) 0%,
+        transparent 70%
+      );
+      pointer-events: none;
+    }
+
+    .download-card-main {
+      background: var(--bg-card);
+      border: 1px solid rgba(0, 212, 255, 0.25);
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+      display: flex;
+      gap: var(--space-xl);
+      align-items: center;
+      margin-bottom: var(--space-xl);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .download-card-main::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(
+        ellipse 60% 80% at 0% 50%,
+        rgba(0, 212, 255, 0.05) 0%,
+        transparent 70%
+      );
+      pointer-events: none;
+    }
+
+    .pdf-preview {
+      flex-shrink: 0;
+      width: 160px;
+      height: 210px;
+      background: var(--bg-black);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      border-radius: var(--radius-md);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      position: relative;
+    }
+
+    .pdf-preview::after {
+      content: "PDF";
+      position: absolute;
+      top: var(--space-sm);
+      right: var(--space-sm);
+      background: rgba(255, 50, 50, 0.15);
+      border: 1px solid rgba(255, 50, 50, 0.3);
+      border-radius: 4px;
+      padding: 0.15rem 0.4rem;
+      font-size: 10px;
+      font-family: var(--font-title);
+      color: #ff6060;
+      letter-spacing: 0.05em;
+    }
+
+    .pdf-icon {
+      font-size: 3rem;
+      line-height: 1;
+    }
+
+    .pdf-pages {
+      font-size: var(--text-xs);
+      color: var(--text-disabled);
+    }
+
+    .download-info {
+      flex: 1;
+    }
+
+    .download-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin: var(--space-md) 0;
+    }
+
+    .download-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: var(--text-xs);
+      color: var(--text-disabled);
+      background: var(--bg-black);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 0.3rem 0.7rem;
+    }
+
+    .download-meta-item span:first-child {
+      color: var(--neon-primary);
+    }
+
+    .download-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-top: var(--space-lg);
+    }
+
+    .form-gate {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .conteudo-lista {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .conteudo-item {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      padding: var(--space-sm) var(--space-md);
+      background: var(--bg-black);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+      transition: border-color 0.2s;
+    }
+
+    .conteudo-item:hover {
+      border-color: rgba(0, 212, 255, 0.2);
+    }
+
+    .conteudo-num {
+      font-family: var(--font-title);
+      font-size: var(--text-xs);
+      color: var(--neon-primary);
+      flex-shrink: 0;
+      min-width: 1.5rem;
+    }
+
+    /* Modal de sucesso */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+      padding: var(--space-md);
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-box {
+      background: var(--bg-card);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+      transform: scale(0.95);
+      transition: transform 0.3s;
+    }
+
+    .modal-overlay.active .modal-box {
+      transform: scale(1);
+    }
+
+    .modal-icon {
+      font-size: 3rem;
+      margin-bottom: var(--space-md);
+      display: block;
+    }
+
+    @media (max-width: 640px) {
+      .download-card-main {
+        flex-direction: column;
+        text-align: center;
+      }
+      .download-meta {
+        justify-content: center;
+      }
+      .download-actions {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar" id="navbar" aria-label="Menu principal">
+    <div class="container">
+      <div class="navbar-inner">
+        <a href="/index.html" class="navbar-logo" aria-label="Box Machine - Página inicial">
+          <img src="/assets/logo-placeholder.svg" alt="Logo Box Machine" />
+          Box<span>Machine</span>
+        </a>
+
+        <ul class="nav-links" role="list">
+          <li><a href="/sobre.html">Sobre</a></li>
+          <li><a href="/solucoes.html">Soluções</a></li>
+          <li><a href="/parceria.html">Parceria</a></li>
+          <li><a href="/mapa.html">Mapa de Pontos</a></li>
+          <li><a href="/faq.html">FAQ</a></li>
+          <li><a href="/contato.html">Contato</a></li>
+          <li class="nav-cta">
+            <a href="/compra.html" class="btn btn-primary btn-sm">Solicitar Proposta</a>
+          </li>
+        </ul>
+
+        <button class="hamburger" id="hamburger"
+                aria-label="Abrir menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+
+      <div class="mobile-menu" id="mobileMenu" role="navigation">
+        <a href="/sobre.html">Sobre</a>
+        <a href="/solucoes.html">Soluções</a>
+        <a href="/parceria.html">Parceria</a>
+        <a href="/mapa.html">Mapa de Pontos</a>
+        <a href="/faq.html">FAQ</a>
+        <a href="/contato.html">Contato</a>
+        <a href="/compra.html" class="btn btn-primary btn-sm mt-sm">Solicitar Proposta</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <div class="download-hero">
+    <div class="download-hero-bg" aria-hidden="true"></div>
+    <div class="container" style="position:relative; z-index:1;">
+      <p class="section-label"
+         style="justify-content:center; display:flex;">
+        Material gratuito
+      </p>
+      <h1 style="max-width:620px; margin:0 auto var(--space-sm);">
+        Baixe nossa Apresentação<br />
+        <span class="highlight">Completa em PDF</span>
+      </h1>
+      <p style="max-width:500px; margin:0 auto;
+                font-size:var(--text-lg); color:var(--text-muted);">
+        Tudo que você precisa saber sobre os modelos de negócio,
+        tecnologia e números da Box Machine em um único documento.
+      </p>
+    </div>
+  </div>
+
+  <!-- ===== ÁREA PRINCIPAL ===== -->
+  <section class="section" style="padding-top:0;"
+           aria-labelledby="download-title">
+    <div class="container">
+      <div class="grid-2" style="gap:var(--space-xl); align-items:start;">
+
+        <!-- CARD DO PDF -->
+        <div>
+          <h2 id="download-title" class="sr-only">
+            Download da Apresentação Box Machine
+          </h2>
+
+          <div class="download-card-main">
+            <!-- Preview do PDF -->
+            <div class="pdf-preview">
+              <span class="pdf-icon">📄</span>
+              <span class="pdf-pages">~24 páginas</span>
+            </div>
+
+            <!-- Informações -->
+            <div class="download-info">
+              <p class="section-label" style="margin-bottom:0.4rem;">
+                Apresentação oficial
+              </p>
+              <h3 style="font-size:var(--text-xl);
+                         margin-bottom:var(--space-sm);">
+                Box Machine — Apresentação Completa 2025
+              </h3>
+              <p style="font-size:var(--text-sm); color:var(--text-muted);">
+                Documento completo com modelos de negócio, tecnologia IoT,
+                estrutura de comissões, cases de sucesso e como começar.
+              </p>
+
+              <div class="download-meta">
+                <div class="download-meta-item">
+                  <span>📄</span> PDF
+                </div>
+                <div class="download-meta-item">
+                  <span>📦</span> ~3 MB
+                </div>
+                <div class="download-meta-item">
+                  <span>📅</span> Jan 2025
+                </div>
+                <div class="download-meta-item">
+                  <span>🔒</span> Gratuito
+                </div>
+              </div>
+
+              <div class="download-actions">
+                <!--
+                  INSTRUÇÃO: Substitua o href abaixo pelo caminho
+                  real do seu PDF.
+                  Coloque o arquivo em /pdfs/apresentacao-boxmachine.pdf
+                  O atributo "download" faz o arquivo ser baixado
+                  diretamente pelo navegador.
+                -->
+                <a href="/pdfs/apresentacao-boxmachine.pdf"
+                   download="Apresentacao-BoxMachine-2025.pdf"
+                   class="btn btn-primary btn-lg"
+                   id="btnDownloadDireto">
+                  ⬇ Baixar PDF Agora
+                </a>
+                <a href="/compra.html"
+                   class="btn btn-outline btn-lg">
+                  Falar com Consultor
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- O que está no PDF -->
+          <div>
+            <p class="section-label" style="margin-bottom:var(--space-md);">
+              O que está no documento
+            </p>
+
+            <div class="conteudo-lista">
+
+              <div class="conteudo-item">
+                <span class="conteudo-num">01</span>
+                <span>Apresentação da Box Machine — história, missão e visão</span>
+              </div>
+
+              <div class="conteudo-item">
+                <span class="conteudo-num">02</span>
+                <span>O mercado de vending no Brasil — tamanho e oportunidade</span>
+              </div>
+
+              <div class="conteudo-item">
+                <span class="conteudo-num">03</span>
+                <span>Modelos de negócio — compra, aluguel e parceria de ponto</span>
+              </div>
+
+              <div class="conteudo-item">
+                <span class="conteudo-num">04</span>
+                <span>Tecnologia IoT — plataforma, app de gestão e conectividade</span>
+              </div>
+
+              <div class="conteudo-item">
+                <span class="conteudo-num">05</span>
+                <span>Simulação de retorno sobre investimento (ROI)</span>
+              </div>
+
+              <div class="conteudo-item">
+                <span class="conteudo-num">06</span>
+                <span>Estrutura de comissões para parceiros de ponto</span>
+              </div>
+
+              <div class="conteudo-item">
+                <span class="conteudo-num">07</span>
+                <span>Cases de sucesso — operadores reais e seus resultados</span>
+              </div>
+
+              <div class="conteudo-item">
+                <span class="conteudo-num">08</span>
+                <span>Suporte técnico — SLA, cobertura e como funciona</span>
+              </div>
+
+              <div class="conteudo-item">
+                <span class="conteudo-num">09</span>
+                <span>Perguntas frequentes e próximos passos</span>
+              </div>
+
+              <div class="conteudo-item">
+                <span class="conteudo-num">10</span>
+                <span>Contatos e canais para solicitar sua proposta</span>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- FORMULÁRIO GATE -->
+        <div style="position:sticky; top:100px;">
+
+          <p class="section-label" style="margin-bottom:var(--space-sm);">
+            Acesso liberado
+          </p>
+          <h2 style="margin-bottom:var(--space-sm);">
+            Receba também por<br />e-mail
+          </h2>
+          <p style="font-size:var(--text-sm); color:var(--text-muted);
+                    margin-bottom:var(--space-lg);">
+            Preencha seus dados abaixo e enviamos o PDF diretamente
+            para o seu e-mail. Você também receberá conteúdos
+            exclusivos sobre o mercado de vending.
+          </p>
+
+          <form class="form-gate" id="formDownload" novalidate>
+
+            <!-- Nome -->
+            <div class="form-group">
+              <label class="form-label" for="dl-nome">
+                Nome completo <span class="required">*</span>
+              </label>
+              <input type="text" id="dl-nome" name="nome"
+                     class="form-control"
+                     placeholder="Seu nome completo" required />
+              <span class="form-error" id="err-dl-nome">
+                Campo obrigatório.
+              </span>
+            </div>
+
+            <!-- E-mail -->
+            <div class="form-group">
+              <label class="form-label" for="dl-email">
+                E-mail <span class="required">*</span>
+              </label>
+              <input type="email" id="dl-email" name="email"
+                     class="form-control"
+                     placeholder="seu@email.com" required />
+              <span class="form-error" id="err-dl-email">
+                E-mail inválido.
+              </span>
+            </div>
+
+            <!-- WhatsApp -->
+            <div class="form-group">
+              <label class="form-label" for="dl-tel">
+                WhatsApp <span class="required">*</span>
+              </label>
+              <input type="tel" id="dl-tel" name="telefone"
+                     class="form-control"
+                     placeholder="(00) 00000-0000" required />
+              <span class="form-error" id="err-dl-tel">
+                Campo obrigatório.
+              </span>
+            </div>
+
+            <!-- Interesse -->
+            <div class="form-group">
+              <label class="form-label" for="dl-interesse">
+                Seu interesse principal
+              </label>
+              <select id="dl-interesse" name="interesse"
+                      class="form-control">
+                <option value="">Selecione uma opção</option>
+                <option value="compra">Quero comprar uma máquina</option>
+                <option value="aluguel">Quero alugar uma máquina</option>
+                <option value="parceria">Quero disponibilizar meu espaço</option>
+                <option value="pesquisa">Estou pesquisando o mercado</option>
+              </select>
+            </div>
+
+            <!-- LGPD -->
+            <div class="form-group">
+              <label class="form-checkbox">
+                <input type="checkbox" id="dl-lgpd"
+                       name="lgpd" required />
+                <span>
+                  Concordo com a
+                  <a href="/politica.html" target="_blank">
+                    Política de Privacidade
+                  </a> e autorizo o contato da Box Machine.
+                  <span class="required">*</span>
+                </span>
+              </label>
+              <span class="form-error" id="err-dl-lgpd">
+                Aceite obrigatório.
+              </span>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-full">
+              Enviar e Baixar PDF
+            </button>
+
+            <p style="font-size:var(--text-xs); color:var(--text-disabled);
+                      text-align:center; margin-top:var(--space-md);">
+              Sem spam. Você pode cancelar o recebimento de e-mails
+              a qualquer momento.
+            </p>
+
+          </form>
+
+          <!-- Aviso de privacidade -->
+          <div style="margin-top:var(--space-md); padding:var(--space-md);
+                      border:1px solid var(--border-subtle);
+                      border-radius:var(--radius-md); text-align:center;">
+            <p style="font-size:var(--text-xs); color:var(--text-disabled);
+                      margin:0; line-height:1.6;">
+              🔒 Seus dados são protegidos pela nossa
+              <a href="/politica.html"
+                 style="color:var(--neon-primary);">
+                Política de Privacidade
+              </a>
+              e nunca serão compartilhados com terceiros.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== OUTROS MATERIAIS ===== -->
+  <section class="section section-alt"
+           aria-labelledby="outros-title">
+    <div class="container">
+
+      <div class="section-header center">
+        <p class="section-label">Continue explorando</p>
+        <h2 class="section-title" id="outros-title">
+          Outros materiais<br />e recursos
+        </h2>
+      </div>
+
+      <div class="grid-3">
+
+        <div class="card">
+          <div class="feature-icon">🎥</div>
+          <h3>Vídeo Demonstração</h3>
+          <p style="font-size:var(--text-sm);">
+            Assista ao vídeo completo das nossas máquinas em
+            funcionamento, com destaque para a plataforma IoT
+            e o app de gestão.
+          </p>
+          <a href="/solucoes.html"
+             class="btn btn-outline btn-sm mt-md">
+            Ver Soluções
+          </a>
+        </div>
+
+        <div class="card card-neon">
+          <div class="feature-icon">📊</div>
+          <h3>Simulador de ROI</h3>
+          <p style="font-size:var(--text-sm);">
+            Quer saber quanto pode ganhar com uma ou mais máquinas?
+            Fale com um consultor e receba uma simulação
+            personalizada para o seu perfil.
+          </p>
+          <a href="/compra.html"
+             class="btn btn-primary btn-sm mt-md">
+            Solicitar Simulação
+          </a>
+        </div>
+
+        <div class="card">
+          <div class="feature-icon">❓</div>
+          <h3>Perguntas Frequentes</h3>
+          <p style="font-size:var(--text-sm);">
+            Tire todas as suas dúvidas sobre compra, aluguel,
+            parceria, suporte técnico e muito mais na nossa
+            página de FAQ completa.
+          </p>
+          <a href="/faq.html"
+             class="btn btn-outline btn-sm mt-md">
+            Ver FAQ
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="section" style="text-align:center;
+    background:radial-gradient(ellipse 60% 80% at 50% 50%,
+    rgba(0,212,255,0.07) 0%, transparent 70%), var(--bg-black);">
+    <div class="container">
+      <p class="section-label"
+         style="justify-content:center; display:flex;">
+        Próximo passo
+      </p>
+      <h2 style="max-width:600px; margin:0 auto var(--space-sm);">
+        Gostou do que viu<br />no PDF?
+      </h2>
+      <p style="max-width:480px; margin:0 auto var(--space-xl);
+                font-size:var(--text-lg);">
+        Fale agora com um consultor Box Machine e receba uma
+        proposta personalizada para o seu perfil em até 24 horas.
+      </p>
+      <div class="flex justify-center flex-wrap gap-sm">
+        <a href="/compra.html" class="btn btn-primary btn-lg">
+          Solicitar Proposta
+        </a>
+        <a href="https://wa.me/5500000000000?text=Olá!%20Baixei%20a%20apresentação%20e%20quero%20saber%20mais."
+           target="_blank" rel="noopener"
+           class="btn btn-outline btn-lg">
+          Falar no WhatsApp
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+
+        <div class="footer-brand">
+          <a href="/index.html" class="navbar-logo"
+             style="margin-bottom:var(--space-sm); display:inline-flex;">
+            Box<span>Machine</span>
+          </a>
+          <p>
+            Tecnologia em venda automática para empresas e
+            investidores em todo o Brasil.
+          </p>
+        </div>
+
+        <div>
+          <p class="footer-heading">Soluções</p>
+          <div class="footer-links">
+            <a href="/compra.html">Compra de Máquina</a>
+            <a href="/aluguel.html">Aluguel de Máquina</a>
+            <a href="/parceria.html">Cadastrar Ponto</a>
+            <a href="/download.html">Apresentação PDF</a>
+          </div>
+        </div>
+
+        <div>
+          <p class="footer-heading">Empresa</p>
+          <div class="footer-links">
+            <a href="/sobre.html">Sobre nós</a>
+            <a href="/mapa.html">Mapa de Pontos</a>
+            <a href="/faq.html">FAQ</a>
+            <a href="/contato.html">Contato</a>
+          </div>
+        </div>
+
+        <div>
+          <p class="footer-heading">Legal</p>
+          <div class="footer-links">
+            <a href="/politica.html">Política de Privacidade</a>
+            <a href="/politica.html#lgpd">LGPD</a>
+            <a href="/politica.html#cookies">Cookies</a>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2025 Box Machine. Todos os direitos reservados.</p>
+        <p>CNPJ: XX.XXX.XXX/0001-XX</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== MODAL DE SUCESSO ===== -->
+  <div class="modal-overlay" id="modalDownload" role="dialog"
+       aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-box">
+      <span class="modal-icon">🎉</span>
+      <h2 id="modal-title"
+          style="margin-bottom:var(--space-sm);">
+        PDF enviado com sucesso!
+      </h2>
+      <p style="font-size:var(--text-sm); color:var(--text-muted);
+                margin-bottom:var(--space-lg);">
+        Verifique sua caixa de entrada — o PDF da Box Machine
+        está a caminho. Se preferir, clique abaixo para
+        baixar agora mesmo.
+      </p>
+      <div style="display:flex; flex-direction:column;
+                  gap:var(--space-sm);">
+        <!--
+          INSTRUÇÃO: Substitua o href pelo caminho real do PDF.
+          O arquivo deve estar em /pdfs/apresentacao-boxmachine.pdf
+        -->
+        <a href="/pdfs/apresentacao-boxmachine.pdf"
+           download="Apresentacao-BoxMachine-2025.pdf"
+           class="btn btn-primary w-full">
+          ⬇ Baixar PDF Agora
+        </a>
+        <button class="btn btn-outline w-full"
+                id="modalClose">
+          Fechar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== WHATSAPP FLUTUANTE ===== -->
+  <a href="https://wa.me/5500000000000?text=Olá!%20Vim%20pelo%20site%20Box%20Machine."
+     class="whatsapp-float" target="_blank" rel="noopener"
+     aria-label="Falar no WhatsApp">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+  </a>
+
+  <!-- JS -->
+  <script src="/js/main.js"></script>
+
+  <script>
+    // Modal de sucesso ao enviar formulário
+    const formDownload  = document.getElementById('formDownload');
+    const modalDownload = document.getElementById('modalDownload');
+    const modalClose    = document.getElementById('modalClose');
+
+    if (formDownload) {
+      formDownload.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const nome  = document.getElementById('dl-nome');
+        const email = document.getElementById('dl-email');
+        const tel   = document.getElementById('dl-tel');
+        const lgpd  = document.getElementById('dl-lgpd');
+        let valid   = true;
+
+        // Validação simples
+        if (!nome.value.trim()) {
+          document.getElementById('err-dl-nome')
+            .style.display = 'block';
+          valid = false;
+        } else {
+          document.getElementById('err-dl-nome')
+            .style.display = 'none';
+        }
+
+        const emailRegex = /
+^
+[^\s@]+@[^\s@]+\.[^\s@]+
+$
+/;
+        if (!emailRegex.test(email.value.trim())) {
+          document.getElementById('err-dl-email')
+            .style.display = 'block';
+          valid = false;
+        } else {
+          document.getElementById('err-dl-email')
+            .style.display = 'none';
+        }
+
+        if (!tel.value.trim()) {
+          document.getElementById('err-dl-tel')
+            .style.display = 'block';
+          valid = false;
+        } else {
+          document.getElementById('err-dl-tel')
+            .style.display = 'none';
+        }
+
+        if (!lgpd.checked) {
+          document.getElementById('err-dl-lgpd')
+            .style.display = 'block';
+          valid = false;
+        } else {
+          document.getElementById('err-dl-lgpd')
+            .style.display = 'none';
+        }
+
+        if (!valid) return;
+
+        // Abre modal de sucesso
+        modalDownload.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      });
+    }
+
+    // Fecha modal
+    if (modalClose) {
+      modalClose.addEventListener('click', () => {
+        modalDownload.classList.remove('active');
+        document.body.style.overflow = '';
+      });
+    }
+
+    // Fecha clicando fora
+    if (modalDownload) {
+      modalDownload.addEventListener('click', (e) => {
+        if (e.target === modalDownload) {
+          modalDownload.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>

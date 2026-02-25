@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Box Machine — Vending Machine Inteligente no Brasil</title>
+  <meta name="description" content="A Box Machine transforma circulação em oportunidade. Máquinas de venda automática com tecnologia IoT para empresas, academias, hospitais e condomínios." />
+  <link rel="canonical" href="https://boxmachine.com.br/" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/styles.css" />
+
+  <!-- Scroll Progress Bar -->
+  <style>
+    #scrollProgress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0%;
+      background: linear-gradient(90deg, var(--blue-700), var(--blue-400));
+      z-index: 9999;
+      transition: width 0.1s linear;
+    }
+
+    /* ===== HERO OVERRIDE ===== */
+    .hero {
+      background: var(--white);
+      padding-top: 72px;
+      min-height: 100vh;
+    }
+
+    .hero-bg-shape {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 55%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--blue-050) 0%, var(--blue-100) 100%);
+      clip-path: polygon(12% 0, 100% 0, 100% 100%, 0% 100%);
+      z-index: 0;
+    }
+
+    @media (max-width: 1024px) {
+      .hero-bg-shape { display: none; }
+    }
+
+    /* ===== MARQUEE LOGOS ===== */
+    .marquee-wrap {
+      overflow: hidden;
+      background: var(--gray-50);
+      border-top: 1px solid var(--border-light);
+      border-bottom: 1px solid var(--border-light);
+      padding: var(--space-lg) 0;
+    }
+
+    .marquee-track {
+      display: flex;
+      gap: var(--space-3xl);
+      width: max-content;
+      animation: marquee 28s linear infinite;
+    }
+
+    .marquee-item {
+      font-family: var(--font-title);
+      font-weight: 700;
+      font-size: var(--text-base);
+      color: var(--gray-400);
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .marquee-item::before {
+      content: "●";
+      color: var(--blue-300, #93C5FD);
+      font-size: 8px;
+    }
+
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ===== MACHINE GRID ===== */
+    .machines-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-lg);
+    }
+
+    @media (max-width: 1024px) {
+      .machines-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 640px) {
+      .machines-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ===== COMO FUNCIONA ===== */
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-lg);
+      position: relative;
+    }
+
+    .process-grid::before {
+      content: "";
+      position: absolute;
+      top: 28px;
+      left: calc(12.5% + 20px);
+      right: calc(12.5% + 20px);
+      height: 2px;
+      background: linear-gradient(90deg, var(--blue-200, #BFDBFE), var(--blue-400));
+    }
+
+    @media (max-width: 1024px) {
+      .process-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .process-grid::before { display: none; }
+    }
+
+    @media (max-width: 640px) {
+      .process-grid { grid-template-columns: 1fr; }
+    }
+
+    .process-step {
+      text-align: center;
+      position: relative;
+    }
+
+    .process-num {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--blue-700);
+      color: var(--white);
+      font-family: var(--font-title);
+      font-weight: 800;
+      font-size: var(--text-xl);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto var(--space-lg);
+      box-shadow: var(--shadow-blue);
+      position: relative;
+      z-index: 1;
+    }
+
+    .process-step h3 {
+      font-size: var(--text-base);
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: var(--space-sm);
+    }
+
+    .process-step p {
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    /* ===== SPLIT SECTION ===== */
+    .split-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-3xl);
+      align-items: center;
+    }
+
+    @media (max-width: 1024px) {
+      .split-section {
+        grid-template-columns: 1fr;
+      }
+      .split-section .split-image { order: -1; }
+    }
+
+    .split-image {
+      position: relative;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-xl);
+    }
+
+    .split-image img {
+      width: 100%;
+      height: 480px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s ease;
+    }
+
+    .split-image:hover img {
+      transform: scale(1.04);
+    }
+
+    .split-image-badge {
+      position: absolute;
+      bottom: var(--space-xl);
+      left: var(--space-xl);
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: var(--space-md) var(--space-lg);
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+    }
+
+    .split-image-badge-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-md);
+      background: var(--blue-050);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .split-image-badge-text strong {
+      display: block;
+      font-size: var(--text-sm);
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+
+    .split-image-badge-text span {
+      font-size: var(--text-xs);
+      color: var(--text-muted);
+    }
+
+    /* ===== LOCAIS TABS ===== */
+    .locais-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-xl);
+    }
+
+    .locais-tab {
+      padding: 0.5rem 1.1rem;
+      border-radius: var(--radius-full);
+      font-size: var(--text-sm);
+      font-weight: 600;
+      cursor: pointer;
+      border: 2px solid var(--border-light);
+      background: var(--white);
+      color: var(--text-muted);
+      transition: all var(--transition-base);
+    }
+
+    .locais-tab:hover,
+    .locais-tab.active {
+      background: var(--blue-700);
+      color: var(--white);
+      border-color: var(--blue-700);
+    }
+
+    /* ===== PLANOS ===== */
+    .planos-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+
+    @media (max-width: 1024px) {
+      .planos-grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; }
+    }
+
+    .plano-card {
+      background: var(--white);
+      border: 2px solid var(--border-light);
+      border-radius: var(--radius-xl);
+      padding: var(--space-xl);
+      transition: all var(--transition-base);
+      position: relative;
+    }
+
+    .plano-card:hover {
+      border-color: var(--blue-400);
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-6px);
+    }
+
+    .plano-card.featured {
+      border-color: var(--blue-700);
+      background: linear-gradient(135deg, var(--blue-700) 0%, var(--blue-900) 100%);
+      color: var(--white);
+    }
+
+    .plano-card.featured:hover {
+      box-shadow: 0 20px 60px rgba(27,79,168,0.4);
+    }
+
+    .plano-badge {
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--warning);
+      color: var(--white);
+      font-size: var(--text-xs);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.3rem 1rem;
+      border-radius: var(--radius-full);
+      white-space: nowrap;
+    }
+
+    .plano-icon {
+      font-size: 2.5rem;
+      margin-bottom: var(--space-md);
+      display: block;
+    }
+
+    .plano-name {
+      font-family: var(--font-title);
+      font-size: var(--text-xl);
+      font-weight: 800;
+      margin-bottom: var(--space-sm);
+    }
+
+    .plano-desc {
+      font-size: var(--text-sm);
+      line-height: 1.7;
+      margin-bottom: var(--space-lg);
+      color: var(--text-muted);
+    }
+
+    .plano-card.featured .plano-desc {
+      color: rgba(255,255,255,0.75);
+    }
+
+    .plano-features {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-bottom: var(--space-xl);
+    }
+
+    .plano-feature {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: var(--text-sm);
+      color: var(--text-body);
+    }
+
+    .plano-card.featured .plano-feature {
+      color: rgba(255,255,255,0.9);
+    }
+
+    .plano-feature::before {
+      content: "✓";
+      color: var(--blue-600);
+      font-weight: 700;
+      font-size: 0.75rem;
+      width: 18px;
+      height: 18px;
+      background: var(--blue-050);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .plano-card.featured .plano-feature::before {
+      color: var(--blue-700);
+      background: rgba(255,255,255,0.9);
+    }
+
+    /* ===== NÚMEROS STATS ===== */
+    .stats-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }
+
+    .stats-strip-item {
+      text-align: center;
+      padding: var(--space-2xl) var(--space-xl);
+      border-right: 1px solid rgba(255,255,255,0.1);
+      position: relative;
+    }
+
+    .stats-strip-item:last-child {
+      border-right: none;
+    }
+
+    @media (max-width: 768px) {
+      .stats-strip {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .stats-strip-item:nth-child(2) { border-right: none; }
+      .stats-strip-item:nth-child(1),
+      .stats-strip-item:nth-child(2) {
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .stats-strip { grid-template-columns: 1fr; }
+      .stats-strip-item { border-right: none !important; border-bottom: 1px solid rgba(255,255,255,0.1); }
+      .stats-strip-item:last-child { border-bottom: none; }
+    }
+
+    /* ===== DEPOIMENTOS ===== */
+    .depoimentos-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-lg);
+    }
+
+    @media (max-width: 1024px) {
+      .depoimentos-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 640px) {
+      .depoimentos-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ===== COOKIE BANNER ===== */
+    #cookieBanner {
+      display: none;
+      position: fixed;
+      bottom: var(--space-xl);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--gray-900);
+      color: var(--white);
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg) var(--space-xl);
+      max-width: 560px;
+      width: calc(100% - 2rem);
+      box-shadow: var(--shadow-xl);
+      z-index: 998;
+      align-items: center;
+      gap: var(--space-lg);
+      flex-wrap: wrap;
+    }
+
+    #cookieBanner p {
+      font-size: var(--text-sm);
+      color: rgba(255,255,255,0.8);
+      flex: 1;
+      min-width: 200px;
+    }
+
+    #cookieBanner a {
+      color: var(--blue-400);
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Barra de progresso de scroll -->
+  <div id="scrollProgress" aria-hidden="true"></div>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar" id="navbar" aria-label="Menu principal">
+    <div class="container">
+      <div class="navbar-inner">
+
+        <a href="/index.html" class="navbar-logo"
+           aria-label="Box Machine — Página inicial">
+          <img src="/assets/logo-placeholder.svg"
+               alt="Logo Box Machine" />
+          Box<span>Machine</span>
+        </a>
+
+        <ul class="nav-links" role="list">
+          <li><a href="/sobre.html">Sobre</a></li>
+          <li><a href="/solucoes.html">Soluções</a></li>
+          <li><a href="/parceria.html">Parceria</a></li>
+          <li><a href="/mapa.html">Mapa de Pontos</a></li>
+          <li><a href="/faq.html">FAQ</a></li>
+          <li><a href="/contato.html">Contato</a></li>
+          <li class="nav-cta">
+            <a href="/compra.html"
+               class="btn btn-primary btn-sm">
+              Solicitar Proposta
+            </a>
+          </li>
+        </ul>
+
+        <button class="hamburger" id="hamburger"
+                aria-label="Abrir menu"
+                aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+
+      <div class="mobile-menu" id="mobileMenu"
+           role="navigation">
+        <a href="/sobre.html">Sobre</a>
+        <a href="/solucoes.html">Soluções</a>
+        <a href="/parceria.html">Parceria</a>
+        <a href="/mapa.html">Mapa de Pontos</a>
+        <a href="/faq.html">FAQ</a>
+        <a href="/contato.html">Contato</a>
+        <a href="/compra.html"
+           class="btn btn-primary btn-sm mt-sm">
+          Solicitar Proposta
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" aria-labelledby="hero-title">
+
+    <!-- Shape de fundo -->
+    <div class="hero-bg-shape" aria-hidden="true"></div>
+
+    <div class="container" style="position:relative; z-index:1;">
+      <div class="hero-split">
+
+        <!-- Conteúdo -->
+        <div class="hero-content">
+
+          <div class="hero-eyebrow reveal">
+            🇧🇷 Líder em vending machine no interior do Brasil
+          </div>
+
+          <h1 class="hero-title reveal delay-1" id="hero-title">
+            Conveniência que<br />
+            <span class="highlight-underline">gera receita</span><br />
+            no seu espaço
+          </h1>
+
+          <p class="hero-subtitle reveal delay-2">
+            A Box Machine instala, opera e mantém máquinas de
+            venda automática em locais estratégicos — sem
+            investimento do parceiro, com comissão garantida.
+          </p>
+
+          <div class="hero-actions reveal delay-3">
+            <a href="/compra.html"
+               class="btn btn-primary btn-xl">
+              Quero uma Máquina
+            </a>
+            <a href="/parceria.html"
+               class="btn btn-outline btn-xl">
+              Cadastrar meu Espaço
+            </a>
+          </div>
+
+          <div class="hero-trust reveal delay-4">
+            <div class="hero-trust-item">Sem taxa de adesão</div>
+            <div class="hero-trust-item">Suporte 7 dias</div>
+            <div class="hero-trust-item">Tecnologia IoT</div>
+          </div>
+
+          <div class="hero-stats reveal delay-5">
+            <div>
+              <div class="hero-stat-num"
+                   data-count="150"
+                   data-suffix="+">0+</div>
+              <div class="hero-stat-label">Máquinas ativas</div>
+            </div>
+            <div>
+              <div class="hero-stat-num"
+                   data-count="40"
+                   data-suffix="+">0+</div>
+              <div class="hero-stat-label">Cidades atendidas</div>
+            </div>
+            <div>
+              <div class="hero-stat-num"
+                   data-count="98"
+                   data-suffix="%">0%</div>
+              <div class="hero-stat-label">Uptime garantido</div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Imagem hero -->
+        <div class="hero-image reveal-right delay-2">
+          <div class="hero-image-wrap">
+            <!--
+              INSTRUÇÃO: Baixe uma foto de máquina TCN em
+              https://www.tcnvending.com/products/
+              Salve em /assets/hero-machine.jpg
+              e substitua o src abaixo.
+            -->
+            <img
+          src="https://imgur.com/0yiF7mZ"
+          alt="Máquina de venda automática Box Machine em operação"
+          loading="eager"
+        />
+
+            <!-- Badge flutuante 1 -->
+            <div class="hero-badge hero-badge-1">
+              <span>📊</span>
+              <div>
+                <strong style="display:block; font-size:var(--text-sm);">
+                  R$ 4.200
+                </strong>
+                <span style="font-size:var(--text-xs); color:var(--text-muted);">
+                  faturamento médio/mês
+                </span>
+              </div>
+            </div>
+
+            <!-- Badge flutuante 2 -->
+            <div class="hero-badge hero-badge-2">
+              <span>🔒</span>
+              <div>
+                <strong style="display:block; font-size:var(--text-sm);">
+                  100% Seguro
+                </strong>
+                <span style="font-size:var(--text-xs); color:var(--text-muted);">
+                  monitoramento em tempo real
+                </span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MARQUEE — locais atendidos ===== -->
+  <div class="marquee-wrap" aria-hidden="true">
+    <div class="marquee-track">
+      <span class="marquee-item">Academias</span>
+      <span class="marquee-item">Hospitais</span>
+      <span class="marquee-item">Empresas</span>
+      <span class="marquee-item">Escolas</span>
+      <span class="marquee-item">Condomínios</span>
+      <span class="marquee-item">Centros Comerciais</span>
+      <span class="marquee-item">Clínicas</span>
+      <span class="marquee-item">Universidades</span>
+      <span class="marquee-item">Hotéis</span>
+      <span class="marquee-item">Rodoviárias</span>
+      <span class="marquee-item">Academias</span>
+      <span class="marquee-item">Hospitais</span>
+      <span class="marquee-item">Empresas</span>
+      <span class="marquee-item">Escolas</span>
+      <span class="marquee-item">Condomínios</span>
+      <span class="marquee-item">Centros Comerciais</span>
+      <span class="marquee-item">Clínicas</span>
+      <span class="marquee-item">Universidades</span>
+      <span class="marquee-item">Hotéis</span>
+      <span class="marquee-item">Rodoviárias</span>
+    </div>
+  </div>
+
+  <!-- ===== NÚMEROS ===== -->
+  <section class="section-blue" aria-label="Números Box Machine">
+    <div class="stats-strip">
+      <div class="stats-strip-item reveal">
+        <div class="stat-number"
+             data-count="150"
+             data-suffix="+">150+</div>
+        <div class="stat-label">Máquinas instaladas</div>
+      </div>
+      <div class="stats-strip-item reveal delay-1">
+        <div class="stat-number"
+             data-count="40"
+             data-suffix="+">40+</div>
+        <div class="stat-label">Cidades no Brasil</div>
+      </div>
+      <div class="stats-strip-item reveal delay-2">
+        <div class="stat-number"
+             data-count="98"
+             data-suffix="%">98%</div>
+        <div class="stat-label">Uptime médio</div>
+      </div>
+      <div class="stats-strip-item reveal delay-3">
+        <div class="stat-number"
+             data-count="4200"
+             data-prefix="R$"
+             data-suffix="k+">R$4,2k+</div>
+        <div class="stat-label">Faturamento médio/mês</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MÁQUINAS ===== -->
+  <section class="section" aria-labelledby="maquinas-title">
+    <div class="container">
+
+      <div class="section-header center">
+        <p class="section-label">Nossa frota</p>
+        <h2 class="section-title" id="maquinas-title">
+          Máquinas para cada<br />tipo de negócio
+        </h2>
+        <p class="section-subtitle" style="margin: 0 auto;">
+          Trabalhamos com os melhores equipamentos TCN —
+          tecnologia japonesa com conectividade IoT para
+          gestão completa em tempo real.
+        </p>
+      </div>
+
+      <div class="machines-grid">
+
+        <!-- Máquina 1 -->
+        <div class="machine-card reveal">
+          <div class="machine-card-image">
+            <!--
+              INSTRUÇÃO: Baixe imagem da TCN Snack Machine em
+              https://www.tcnvending.com e salve em
+              /assets/machine-snack.jpg
+            -->
+            <img
+          src="https://imgur.com/q7EnsxM"
+          alt="Gestão de vending machine pelo celular"
+        />
+          </div>
+          <div class="machine-card-body">
+            <span class="machine-tag">Snacks & Bebidas</span>
+            <h3>TCN Dupla Temperatura</h3>
+            <p>Snacks, bebidas geladas e produtos
+               refrigerados no mesmo equipamento.
+               Ideal para empresas e academias.</p>
+          </div>
+        </div>
+
+        <!-- Máquina 2 -->
+        <div class="machine-card reveal delay-1">
+          <div class="machine-card-image">
+            <img
+          src="https://imgur.com/uhpmzca"
+          alt="Máquina de bebidas quentes e frias"
+          loading="lazy"
+        />
+          </div>
+          <div class="machine-card-body">
+            <span class="machine-tag">Café & Bebidas Quentes</span>
+            <h3>TCN Hot & Cold</h3>
+            <p>Café expresso, cappuccino, chocolate
+               quente e bebidas geladas. Perfeita
+               para hospitais e escritórios.</p>
+          </div>
+        </div>
+
+        <!-- Máquina 3 -->
+        <div class="machine-card reveal delay-2">
+          <div class="machine-card-image">
+            <img
+          src="https://imgur.com/BgVig9O"
+          alt="Máquina de itens variados"
+          loading="lazy"
+        />
+          </div>
+          <div class="machine-card-body">
+            <span class="machine-tag">Multifuncional</span>
+            <h3>TCN Combo Premium</h3>
+            <p>Capacidade expandida com até 400
+               produtos. Solução completa para
+               locais com alto fluxo de pessoas.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div style="text-align:center; margin-top:var(--space-2xl);">
+        <a href="/solucoes.html"
+           class="btn btn-outline btn-lg">
+          Ver todos os modelos
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== COMO FUNCIONA ===== -->
+  <section class="section section-alt"
+           aria-labelledby="como-title">
+    <div class="container">
+
+      <div class="section-header center">
+        <p class="section-label">Processo simples</p>
+        <h2 class="section-title" id="como-title">
+          Do contato à máquina<br />em funcionamento
+        </h2>
+      </div>
+
+      <div class="process-grid">
+
+        <div class="process-step reveal">
+          <div class="process-num">1</div>
+          <h3>Avaliação do ponto</h3>
+          <p>Analisamos o fluxo e potencial
+             do seu estabelecimento
+             gratuitamente.</p>
+        </div>
+
+        <div class="process-step reveal delay-1">
+          <div class="process-num">2</div>
+          <h3>Proposta personalizada</h3>
+          <p>Escolha o modelo ideal —
+             compra, aluguel ou parceria
+             de ponto.</p>
+        </div>
+
+        <div class="process-step reveal delay-2">
+          <div class="process-num">3</div>
+          <h3>Instalação em 48h</h3>
+          <p>Nossa equipe instala e configura
+             a máquina no local
+             em até 48 horas.</p>
+        </div>
+
+        <div class="process-step reveal delay-3">
+          <div class="process-num">4</div>
+          <h3>Gestão e receita</h3>
+          <p>Acompanhe vendas em tempo real
+             e receba sua comissão
+             todo mês.</p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== ONDE FAZ SENTIDO ===== -->
+  <section class="section" aria-labelledby="locais-title">
+    <div class="container">
+
+      <div class="split-section">
+
+        <!-- Imagem -->
+        <div class="split-image reveal-left">
+          <img
+          src="https://imgur.com/g6oGlhC"
+          alt="Máquina de vending em academia"
+        />
+          <div class="split-image-badge">
+            <div class="split-image-badge-icon">📍</div>
+            <div class="split-image-badge-text">
+              <strong>Ponto validado</strong>
+              <span>Academia — SP</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Conteúdo -->
+        <div class="reveal-right">
+
+          <p class="section-label">Onde faz sentido</p>
+          <h2 class="section-title" id="locais-title">
+            Se há circulação,<br />
+            há <span class="highlight">oportunidade</span>
+          </h2>
+          <p style="color:var(--text-muted);
+                    font-size:var(--text-lg);
+                    margin-bottom:var(--space-xl);
+                    line-height:1.7;">
+            Atendemos qualquer local com fluxo
+            recorrente de pessoas. Quanto maior
+            o movimento, maior o potencial de receita.
+          </p>
+
+          <div class="feature-list">
+
+            <div class="feature-list-item">
+              <div class="feature-list-icon">🏋️</div>
+              <div>
+                <h4>Academias e centros esportivos</h4>
+                <p>Pré-treino, suplementos, bebidas
+                   isotônicas e snacks saudáveis
+                   para quem não para.</p>
+              </div>
+            </div>
+
+            <div class="feature-list-item">
+              <div class="feature-list-icon">🏥</div>
+              <div>
+                <h4>Hospitais e clínicas</h4>
+                <p>Atendimento 24h para acompanhantes
+                   e equipes de plantão com lanches,
+                   café e bebidas.</p>
+              </div>
+            </div>
+
+            <div class="feature-list-item">
+              <div class="feature-list-icon">🏢</div>
+              <div>
+                <h4>Empresas e coworkings</h4>
+                <p>Benefício para colaboradores sem
+                   custo para a empresa. Conveniência
+                   no intervalo do expediente.</p>
+              </div>
+            </div>
+
+            <div class="feature-list-item">
+              <div class="feature-list-icon">🎓</div>
+              <div>
+                <h4>Escolas e universidades</h4>
+                <p>Lanche rápido no intervalo,
+                   disponível para alunos,
+                   professores e funcionários.</p>
+              </div>
+            </div>
+
+          </div>
+
+          <a href="/parceria.html"
+             class="btn btn-primary btn-lg mt-xl">
+            Quero cadastrar meu espaço
+          </a>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MODELOS DE NEGÓCIO ===== -->
+  <section class="section section-alt"
+           aria-labelledby="planos-title">
+    <div class="container">
+
+      <div class="section-header center">
+        <p class="section-label">Modelos de negócio</p>
+        <h2 class="section-title" id="planos-title">
+          Escolha o modelo<br />certo para você
+        </h2>
+        <p class="section-subtitle" style="margin:0 auto;">
+          Seja para investir, alugar ou apenas disponibilizar
+          seu espaço, temos a solução ideal.
+        </p>
+      </div>
+
+      <div class="planos-grid">
+
+        <!-- Compra -->
+        <div class="plano-card reveal">
+          <span class="plano-icon">🏆</span>
+          <h3 class="plano-name">Compra</h3>
+          <p class="plano-desc">
+            Você adquire a máquina e fica com
+            100% da receita. Maior retorno
+            sobre investimento a longo prazo.
+          </p>
+          <div class="plano-features">
+            <div class="plano-feature">100% da receita para você</div>
+            <div class="plano-feature">ROI médio em 14 meses</div>
+            <div class="plano-feature">Suporte técnico incluso</div>
+            <div class="plano-feature">Gestão via app</div>
+            <div class="plano-feature">Reposição de produtos</div>
+          </div>
+          <a href="/compra.html"
+             class="btn btn-outline w-full">
+            Saber mais
+          </a>
+        </div>
+
+        <!-- Aluguel — Destaque -->
+        <div class="plano-card featured reveal delay-1">
+          <div class="plano-badge">Mais escolhido</div>
+          <span class="plano-icon">⭐</span>
+          <h3 class="plano-name"
+              style="color:var(--white);">Aluguel</h3>
+          <p class="plano-desc">
+            Máquina operando no seu negócio
+            com mensalidade fixa. Sem capital
+            investido, resultado imediato.
+          </p>
+          <div class="plano-features">
+            <div class="plano-feature">Sem investimento inicial</div>
+            <div class="plano-feature">Mensalidade fixa</div>
+            <div class="plano-feature">Instalação em 48h</div>
+            <div class="plano-feature">Manutenção inclusa</div>
+            <div class="plano-feature">Troca de máquina gratuita</div>
+          </div>
+          <a href="/compra.html"
+             class="btn btn-white w-full">
+            Solicitar proposta
+          </a>
+        </div>
+
+        <!-- Parceria -->
+        <div class="plano-card reveal delay-2">
+          <span class="plano-icon">🤝</span>
+          <h3 class="plano-name">Parceria de Ponto</h3>
+          <p class="plano-desc">
+            Disponibilize seu espaço e receba
+            comissão mensal. Zero custo,
+            zero trabalho, renda passiva.
+          </p>
+          <div class="plano-features">
+            <div class="plano-feature">Renda passiva garantida</div>
+            <div class="plano-feature">Sem nenhum custo</div>
+            <div class="plano-feature">A Box Machine opera tudo</div>
+            <div class="plano-feature">Comissão mensal</div>
+            <div class="plano-feature">Contrato seguro</div>
+          </div>
+          <a href="/parceria.html"
+             class="btn btn-outline w-full">
+            Cadastrar espaço
+          </a>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== POR QUE BOX MACHINE ===== */
+  <section class="section" aria-labelledby="porque-title">
+    <div class="container">
+
+      <div class="split-section">
+
+        <!-- Conteúdo -->
+        <div class="reveal-left">
+          <p class="section-label">Nossos diferenciais</p>
+          <h2 class="section-title" id="porque-title">
+            Conveniência inteligente.<br />
+            Operação <span class="highlight">estruturada</span>.
+          </h2>
+          <p style="color:var(--text-muted);
+                    font-size:var(--text-lg);
+                    margin-bottom:var(--space-xl);
+                    line-height:1.7;">
+            A Box Machine não é só uma máquina de venda.
+            É uma plataforma completa de conveniência
+            com tecnologia, suporte e gestão integrados.
+          </p>
+
+          <div class="grid-2" style="gap:var(--space-md);">
+
+            <div class="card" style="padding:var(--space-lg);">
+              <div class="feature-icon">📱</div>
+              <h3 style="font-size:var(--text-base);">App de gestão</h3>
+              <p>Acompanhe vendas,
+                 estoque e faturamento
+                 em tempo real.</p>
+            </div>
+
+            <div class="card" style="padding:var(--space-lg);">
+              <div class="feature-icon">🔧</div>
+              <h3 style="font-size:var(--text-base);">Suporte 7 dias</h3>
+              <p>Equipe técnica disponível
+                 todos os dias para
+                 manutenção rápida.</p>
+            </div>
+
+            <div class="card" style="padding:var(--space-lg);">
+              <div class="feature-icon">💳</div>
+              <h3 style="font-size:var(--text-base);">Pagamento digital</h3>
+              <p>PIX, cartão de crédito
+                 e débito. Mais vendas,
+                 menos fricção.</p>
+            </div>
+
+            <div class="card" style="padding:var(--space-lg);">
+              <div class="feature-icon">📦</div>
+              <h3 style="font-size:var(--text-base);">Reposição inteligente</h3>
+              <p>Nunca falta produto.
+                 Alertas automáticos
+                 via IoT.</p>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Imagem -->
+        <div class="split-image reveal-right">
+          <img
+          src="https://imgur.com/bDtqMUo"
+          alt="Gestão de vending machine pelo celular"
+        />
+          <div class="split-image-badge">
+            <div class="split-image-badge-icon">📈</div>
+            <div class="split-image-badge-text">
+              <strong>+32% de vendas</strong>
+              <span>com pagamento digital</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== DEPOIMENTOS ===== -->
+  <section class="section section-alt"
+           aria-labelledby="depoimentos-title">
+    <div class="container">
+
+      <div class="section-header center">
+        <p class="section-label">Quem já confia</p>
+        <h2 class="section-title" id="depoimentos-title">
+          Resultados reais de<br />parceiros reais
+        </h2>
+      </div>
+
+      <div class="depoimentos-grid">
+
+        <div class="testimonial reveal">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">
+            "A máquina entrou na academia há 6 meses.
+             Nunca tive trabalho nenhum — a Box Machine
+             cuida de tudo. Recebo a comissão todo mês
+             na conta."
+          </p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">MF</div>
+            <div>
+              <div class="testimonial-name">Marcos Ferreira</div>
+              <div class="testimonial-role">Dono de academia — Presidente Prudente, SP</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial reveal delay-1">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">
+            "Comprei duas máquinas e já recuperei o
+             investimento em menos de um ano. O app
+             de gestão é incrível — vejo tudo em
+             tempo real pelo celular."
+          </p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">RL</div>
+            <div>
+              <div class="testimonial-name">Ricardo Lima</div>
+              <div class="testimonial-role">Operador independente — Araçatuba, SP</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial reveal delay-2">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">
+            "Nossa clínica tem a máquina no corredor
+             há 8 meses. Os pacientes e acompanhantes
+             adoram. A equipe de suporte responde
+             muito rápido."
+          </p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">CS</div>
+            <div>
+              <div class="testimonial-name">Carla Souza</div>
+              <div class="testimonial-role">Gestora de clínica — Marília, SP</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== CTA FINAL ===== -->
+  <section class="cta-section"
+           aria-labelledby="cta-title">
+    <div class="container">
+
+      <p class="section-label"
+         style="justify-content:center; display:flex; color:rgba(255,255,255,0.6);">
+        Próximo passo
+      </p>
+
+      <h2 class="cta-title" id="cta-title">
+        Pronto para transformar<br />
+        circulação em receita?
+      </h2>
+
+      <p class="cta-subtitle">
+        Fale com um consultor Box Machine e receba uma
+        proposta personalizada em até 24 horas.
+        Sem compromisso.
+      </p>
+
+      <div class="flex justify-center flex-wrap gap-md">
+        <a href="/compra.html"
+           class="btn btn-white btn-xl">
+          Solicitar Proposta Agora
+        </a>
+        <a href="https://wa.me/5518997514873?text=Olá!%20Vim%20pelo%20site%20e%20quero%20saber%20mais%20sobre%20a%20Box%20Machine."
+           target="_blank" rel="noopener"
+           class="btn btn-outline-white btn-xl">
+          💬 Falar no WhatsApp
+        </a>
+      </div>
+
+      <p style="font-size:var(--text-sm);
+                color:rgba(255,255,255,0.45);
+                margin-top:var(--space-xl);">
+        contato@boxmachine.com.br &nbsp;·&nbsp;
+        (18) 9 9751-4873
+      </p>
+
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+
+        <div class="footer-brand">
+          <a href="/index.html" class="navbar-logo"
+             style="margin-bottom:var(--space-md);
+                    display:inline-flex;">
+            Box<span>Machine</span>
+          </a>
+          <p>
+            Tecnologia em venda automática para empresas
+            e investidores em todo o Brasil.
+          </p>
+          <div style="margin-top:var(--space-lg);
+                      display:flex; flex-direction:column;
+                      gap:0.4rem;">
+            <a href="mailto:contato@boxmachine.com.br"
+               style="font-size:var(--text-sm);
+                      color:var(--gray-400);">
+              contato@boxmachine.com.br
+            </a>
+            <a href="tel:+5518997514873"
+               style="font-size:var(--text-sm);
+                      color:var(--gray-400);">
+              (18) 9 9751-4873
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <p class="footer-heading">Soluções</p>
+          <div class="footer-links">
+            <a href="/compra.html">Compra de Máquina</a>
+            <a href="/solucoes.html">Aluguel</a>
+            <a href="/parceria.html">Parceria de Ponto</a>
+            <a href="/download.html">Apresentação PDF</a>
+          </div>
+        </div>
+
+        <div>
+          <p class="footer-heading">Empresa</p>
+          <div class="footer-links">
+            <a href="/sobre.html">Sobre nós</a>
+            <a href="/mapa.html">Mapa de Pontos</a>
+            <a href="/faq.html">FAQ</a>
+            <a href="/contato.html">Contato</a>
+          </div>
+        </div>
+
+        <div>
+          <p class="footer-heading">Legal</p>
+          <div class="footer-links">
+            <a href="/politica.html">Política de Privacidade</a>
+            <a href="/politica.html#lgpd">LGPD</a>
+            <a href="/sitemap.html">Mapa do Site</a>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2025 Box Machine. Todos os direitos reservados.</p>
+        <p>CNPJ: XX.XXX.XXX/0001-XX</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== COOKIE BANNER ===== -->
+  <div id="cookieBanner" role="alertdialog"
+       aria-label="Aviso de cookies">
+    <p>
+      Usamos cookies para melhorar sua experiência.
+      Ao continuar, você concorda com nossa
+      <a href="/politica.html">Política de Privacidade</a>.
+    </p>
+    <button id="cookieAccept"
+            class="btn btn-primary btn-sm">
+      Entendi
+    </button>
+  </div>
+
+  <!-- ===== WHATSAPP FLUTUANTE ===== -->
+  <a href="https://wa.me/5518997514873?text=Olá!%20Vim%20pelo%20site%20Box%20Machine."
+     class="whatsapp-float"
+     target="_blank" rel="noopener"
+     aria-label="Falar no WhatsApp">
+    <svg viewBox="0 0 24 24"
+         xmlns="http://www.w3.org/2000/svg">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+  </a>
+
+  <!-- JS -->
+  <script src="/js/main.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,47 @@
+[
+  {
+    "id": 1,
+    "name": "Hospital São Lucas",
+    "type": "Hospital / Clínica",
+    "category": "hospital",
+    "address": "Av. Paulista, 1000 — São Paulo, SP",
+    "lat": -23.5614,
+    "lng": -46.6559
+  },
+  {
+    "id": 2,
+    "name": "Academia FitMax",
+    "type": "Academia",
+    "category": "academia",
+    "address": "Rua das Flores, 200 — Rio de Janeiro, RJ",
+    "lat": -22.9068,
+    "lng": -43.1729
+  },
+  {
+    "id": 3,
+    "name": "Faculdade Centro Sul",
+    "type": "Escola / Faculdade",
+    "category": "escola",
+    "address": "Av. Brasil, 500 — Curitiba, PR",
+    "lat": -25.4284,
+    "lng": -49.2733
+  },
+  {
+    "id": 4,
+    "name": "Empresa TechCorp",
+    "type": "Empresa / Escritório",
+    "category": "empresa",
+    "address": "Rua Tecnologia, 300 — Belo Horizonte, MG",
+    "lat": -19.9167,
+    "lng": -43.9345
+  },
+  {
+    "id": 5,
+    "name": "Condomínio Parque Verde",
+    "type": "Condomínio Residencial",
+    "category": "condominio",
+    "address": "Rua das Palmeiras, 100 — Porto Alegre, RS",
+    "lat": -30.0346,
+    "lng": -51.2177
+  }
+]

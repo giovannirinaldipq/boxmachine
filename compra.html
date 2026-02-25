@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Solicitar Proposta — Box Machine</title>
+  <meta name="description" content="Solicite uma proposta personalizada para comprar ou alugar uma vending machine Box Machine. Nossa equipe entra em contato em até 24 horas." />
+  <link rel="canonical" href="https://boxmachine.com.br/compra.html" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar" id="navbar" aria-label="Menu principal">
+    <div class="container">
+      <div class="navbar-inner">
+        <a href="/index.html" class="navbar-logo" aria-label="Box Machine - Página inicial">
+          <img src="/assets/logo-placeholder.svg" alt="Logo Box Machine" />
+          Box<span>Machine</span>
+        </a>
+
+        <ul class="nav-links" role="list">
+          <li><a href="/sobre.html">Sobre</a></li>
+          <li><a href="/solucoes.html">Soluções</a></li>
+          <li><a href="/parceria.html">Parceria</a></li>
+          <li><a href="/mapa.html">Mapa de Pontos</a></li>
+          <li><a href="/faq.html">FAQ</a></li>
+          <li><a href="/contato.html">Contato</a></li>
+          <li class="nav-cta">
+            <a href="/compra.html" class="btn btn-primary btn-sm active">Solicitar Proposta</a>
+          </li>
+        </ul>
+
+        <button class="hamburger" id="hamburger"
+                aria-label="Abrir menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+
+      <div class="mobile-menu" id="mobileMenu" role="navigation">
+        <a href="/sobre.html">Sobre</a>
+        <a href="/solucoes.html">Soluções</a>
+        <a href="/parceria.html">Parceria</a>
+        <a href="/mapa.html">Mapa de Pontos</a>
+        <a href="/faq.html">FAQ</a>
+        <a href="/contato.html">Contato</a>
+        <a href="/compra.html" class="btn btn-primary btn-sm mt-sm">Solicitar Proposta</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== PAGE HEADER ===== -->
+  <div class="page-header">
+    <div class="container">
+      <p class="section-label">Dê o primeiro passo</p>
+      <h1>Solicitar Proposta</h1>
+      <p>
+        Preencha o formulário abaixo e nossa equipe de consultores
+        entra em contato em até 24 horas com uma proposta
+        personalizada para o seu perfil.
+      </p>
+    </div>
+  </div>
+
+  <!-- ===== CONTEÚDO PRINCIPAL ===== -->
+  <section class="section" aria-labelledby="form-compra-title">
+    <div class="container">
+      <div class="grid-2" style="gap:4rem; align-items:start;">
+
+        <!-- ===== FORMULÁRIO ===== -->
+        <div>
+          <h2 id="form-compra-title" style="margin-bottom:var(--space-lg);">
+            Seus dados
+          </h2>
+
+          <form id="formCompra" novalidate
+                style="background:var(--bg-card);
+                       border:1px solid var(--border-subtle);
+                       border-radius:var(--radius-lg);
+                       padding:var(--space-xl);">
+
+            <!-- Nome -->
+            <div class="form-group">
+              <label class="form-label" for="c-nome">
+                Nome completo <span class="required">*</span>
+              </label>
+              <input type="text" id="c-nome" name="nome"
+                     class="form-control"
+                     placeholder="Seu nome completo" required />
+              <span class="form-error" id="err-c-nome">
+                Campo obrigatório.
+              </span>
+            </div>
+
+            <!-- WhatsApp -->
+            <div class="form-group">
+              <label class="form-label" for="c-tel">
+                WhatsApp <span class="required">*</span>
+              </label>
+              <input type="tel" id="c-tel" name="telefone"
+                     class="form-control"
+                     placeholder="(00) 00000-0000" required />
+              <span class="form-error" id="err-c-tel">
+                Campo obrigatório.
+              </span>
+            </div>
+
+            <!-- E-mail -->
+            <div class="form-group">
+              <label class="form-label" for="c-email">
+                E-mail <span class="required">*</span>
+              </label>
+              <input type="email" id="c-email" name="email"
+                     class="form-control"
+                     placeholder="seu@email.com" required />
+              <span class="form-error" id="err-c-email">
+                E-mail inválido.
+              </span>
+            </div>
+
+            <!-- Cidade e Estado -->
+            <div style="display:grid; grid-template-columns:1fr 100px;
+                        gap:var(--space-md);">
+              <div class="form-group">
+                <label class="form-label" for="c-cidade">
+                  Cidade <span class="required">*</span>
+                </label>
+                <input type="text" id="c-cidade" name="cidade"
+                       class="form-control"
+                       placeholder="Sua cidade" required />
+                <span class="form-error" id="err-c-cidade">
+                  Campo obrigatório.
+                </span>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="c-estado">
+                  Estado <span class="required">*</span>
+                </label>
+                <select id="c-estado" name="estado"
+                        class="form-control" required>
+                  <option value="">UF</option>
+                  <option>AC</option><option>AL</option>
+                  <option>AP</option><option>AM</option>
+                  <option>BA</option><option>CE</option>
+                  <option>DF</option><option>ES</option>
+                  <option>GO</option><option>MA</option>
+                  <option>MT</option><option>MS</option>
+                  <option>MG</option><option>PA</option>
+                  <option>PB</option><option>PR</option>
+                  <option>PE</option><option>PI</option>
+                  <option>RJ</option><option>RN</option>
+                  <option>RS</option><option>RO</option>
+                  <option>RR</option><option>SC</option>
+                  <option>SP</option><option>SE</option>
+                  <option>TO</option>
+                </select>
+                <span class="form-error" id="err-c-estado">
+                  Obrigatório.
+                </span>
+              </div>
+            </div>
+
+            <!-- Interesse -->
+            <div class="form-group">
+              <label class="form-label" for="c-interesse">
+                Qual é o seu interesse? <span class="required">*</span>
+              </label>
+              <select id="c-interesse" name="interesse"
+                      class="form-control" required>
+                <option value="">Selecione uma opção</option>
+                <option value="compra">Comprar uma máquina</option>
+                <option value="multiplas">Comprar múltiplas máquinas</option>
+                <option value="aluguel">Alugar uma máquina</option>
+                <option value="parceria">Disponibilizar meu espaço</option>
+                <option value="duvida">Ainda tenho dúvidas</option>
+              </select>
+              <span class="form-error" id="err-c-interesse">
+                Selecione uma opção.
+              </span>
+            </div>
+
+            <!-- Quantidade -->
+            <div class="form-group">
+              <label class="form-label" for="c-quantidade">
+                Quantas máquinas você tem interesse?
+              </label>
+              <select id="c-quantidade" name="quantidade"
+                      class="form-control">
+                <option value="">Selecione uma estimativa</option>
+                <option value="1">1 máquina</option>
+                <option value="2-5">De 2 a 5 máquinas</option>
+                <option value="6-10">De 6 a 10 máquinas</option>
+                <option value="10+">Mais de 10 máquinas</option>
+              </select>
+            </div>
+
+            <!-- Experiência -->
+            <div class="form-group">
+              <label class="form-label" for="c-experiencia">
+                Você já tem experiência com vending machines?
+              </label>
+              <select id="c-experiencia" name="experiencia"
+                      class="form-control">
+                <option value="">Selecione uma opção</option>
+                <option value="nao">Não, sou iniciante</option>
+                <option value="pouca">Tenho pouca experiência</option>
+                <option value="sim">Sim, já opero máquinas</option>
+              </select>
+            </div>
+
+            <!-- Mensagem -->
+            <div class="form-group">
+              <label class="form-label" for="c-mensagem">
+                Conte um pouco mais sobre seu projeto
+              </label>
+              <textarea id="c-mensagem" name="mensagem"
+                        class="form-control" rows="4"
+                        placeholder="Descreva seu objetivo, o local que tem em mente, dúvidas ou qualquer informação que achar relevante..."></textarea>
+            </div>
+
+            <!-- Como nos conheceu -->
+            <div class="form-group">
+              <label class="form-label" for="c-origem">
+                Como nos conheceu?
+              </label>
+              <select id="c-origem" name="origem"
+                      class="form-control">
+                <option value="">Selecione uma opção</option>
+                <option value="google">Google</option>
+                <option value="instagram">Instagram</option>
+                <option value="indicacao">Indicação de alguém</option>
+                <option value="youtube">YouTube</option>
+                <option value="outro">Outro</option>
+              </select>
+            </div>
+
+            <!-- LGPD -->
+            <div class="form-group">
+              <label class="form-checkbox">
+                <input type="checkbox" id="c-lgpd"
+                       name="lgpd" required />
+                <span>
+                  Concordo com a
+                  <a href="/politica.html" target="_blank">
+                    Política de Privacidade
+                  </a> e autorizo o contato da Box Machine.
+                  <span class="required">*</span>
+                </span>
+              </label>
+              <span class="form-error" id="err-c-lgpd">
+                Aceite obrigatório.
+              </span>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-full">
+              Enviar Solicitação
+            </button>
+
+            <p style="font-size:var(--text-xs); color:var(--text-disabled);
+                      text-align:center; margin-top:var(--space-md);">
+              Nossa equipe retorna em até 24 horas pelo WhatsApp
+              ou e-mail informado. Sem spam, sem compromisso.
+            </p>
+
+          </form>
+        </div>
+
+        <!-- ===== SIDEBAR ===== -->
+        <div style="position:sticky; top:100px;">
+
+          <!-- O que acontece depois -->
+          <div class="card" style="margin-bottom:var(--space-md);">
+            <p class="section-label" style="margin-bottom:var(--space-sm);">
+              O que acontece depois
+            </p>
+            <h3 style="margin-bottom:var(--space-md);">
+              Próximos passos após<br />o envio
+            </h3>
+
+            <div style="display:flex; flex-direction:column;
+                        gap:var(--space-md);">
+
+              <div style="display:flex; gap:var(--space-md);
+                          align-items:flex-start;">
+                <div style="width:32px; height:32px; border-radius:50%;
+                            background:rgba(0,212,255,0.1);
+                            border:1px solid var(--neon-primary);
+                            display:flex; align-items:center;
+                            justify-content:center; flex-shrink:0;
+                            font-family:var(--font-title);
+                            font-size:var(--text-sm);
+                            color:var(--neon-primary);">1</div>
+                <div>
+                  <p style="font-weight:500; margin:0 0 0.25rem;">
+                    Confirmação imediata
+                  </p>
+                  <p style="font-size:var(--text-sm);
+                            color:var(--text-muted); margin:0;">
+                    Você recebe um e-mail confirmando o recebimento
+                    da sua solicitação.
+                  </p>
+                </div>
+              </div>
+
+              <div style="display:flex; gap:var(--space-md);
+                          align-items:flex-start;">
+                <div style="width:32px; height:32px; border-radius:50%;
+                            background:rgba(0,212,255,0.1);
+                            border:1px solid var(--neon-primary);
+                            display:flex; align-items:center;
+                            justify-content:center; flex-shrink:0;
+                            font-family:var(--font-title);
+                            font-size:var(--text-sm);
+                            color:var(--neon-primary);">2</div>
+                <div>
+                  <p style="font-weight:500; margin:0 0 0.25rem;">
+                    Contato em até 24h
+                  </p>
+                  <p style="font-size:var(--text-sm);
+                            color:var(--text-muted); margin:0;">
+                    Um consultor Box Machine entra em contato pelo
+                    WhatsApp para entender melhor o seu perfil.
+                  </p>
+                </div>
+              </div>
+
+              <div style="display:flex; gap:var(--space-md);
+                          align-items:flex-start;">
+                <div style="width:32px; height:32px; border-radius:50%;
+                            background:rgba(0,212,255,0.1);
+                            border:1px solid var(--neon-primary);
+                            display:flex; align-items:center;
+                            justify-content:center; flex-shrink:0;
+                            font-family:var(--font-title);
+                            font-size:var(--text-sm);
+                            color:var(--neon-primary);">3</div>
+                <div>
+                  <p style="font-weight:500; margin:0 0 0.25rem;">
+                    Proposta personalizada
+                  </p>
+                  <p style="font-size:var(--text-sm);
+                            color:var(--text-muted); margin:0;">
+                    Preparamos uma proposta sob medida para o seu
+                    objetivo e orçamento.
+                  </p>
+                </div>
+              </div>
+
+              <div style="display:flex; gap:var(--space-md);
+                          align-items:flex-start;">
+                <div style="width:32px; height:32px; border-radius:50%;
+                            background:rgba(0,212,255,0.1);
+                            border:1px solid var(--neon-primary);
+                            display:flex; align-items:center;
+                            justify-content:center; flex-shrink:0;
+                            font-family:var(--font-title);
+                            font-size:var(--text-sm);
+                            color:var(--neon-primary);">4</div>
+                <div>
+                  <p style="font-weight:500; margin:0 0 0.25rem;">
+                    Máquina instalada
+                  </p>
+                  <p style="font-size:var(--text-sm);
+                            color:var(--text-muted); margin:0;">
+                    Após aprovação, instalamos e configuramos sua
+                    máquina em até 48 horas.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Contato direto -->
+          <div class="card card-neon">
+            <p class="section-label" style="margin-bottom:var(--space-sm);">
+              Prefere falar agora?
+            </p>
+            <h3 style="margin-bottom:var(--space-sm);">
+              Fale direto pelo<br />WhatsApp
+            </h3>
+            <p style="font-size:var(--text-sm); color:var(--text-muted);
+                      margin-bottom:var(--space-md);">
+              Se preferir conversar antes de preencher o formulário,
+              nossa equipe está disponível agora.
+            </p>
+            <a href="https://wa.me/5500000000000?text=Olá!%20Tenho%20interesse%20em%20uma%20proposta%20Box%20Machine."
+               target="_blank" rel="noopener"
+               class="btn btn-primary w-full">
+              Abrir WhatsApp
+            </a>
+          </div>
+
+          <!-- Garantias -->
+          <div style="margin-top:var(--space-md); padding:var(--space-md);
+                      border:1px solid var(--border-subtle);
+                      border-radius:var(--radius-md);">
+            <p style="font-size:var(--text-xs); color:var(--text-disabled);
+                      margin:0; text-align:center; line-height:1.6;">
+              🔒 Seus dados estão protegidos pela nossa
+              <a href="/politica.html" style="color:var(--neon-primary);">
+                Política de Privacidade
+              </a>
+              e nunca serão compartilhados com terceiros.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== DEPOIMENTOS / SOCIAL PROOF ===== -->
+  <section class="section section-alt" aria-labelledby="prova-title">
+    <div class="container">
+
+      <div class="section-header center">
+        <p class="section-label">Quem já está conosco</p>
+        <h2 class="section-title" id="prova-title">
+          Parceiros que confiam<br />na Box Machine
+        </h2>
+      </div>
+
+      <div class="grid-3">
+
+        <div class="card">
+          <p style="font-size:var(--text-sm); color:var(--text-muted);
+                    font-style:italic; margin-bottom:var(--space-md);">
+            "Comecei com uma máquina e em seis meses já tenho três.
+            O suporte da Box Machine é diferente de tudo que já vi
+            no mercado."
+          </p>
+          <div style="display:flex; align-items:center; gap:var(--space-sm);">
+            <div style="width:40px; height:40px; border-radius:50%;
+                        background:rgba(0,212,255,0.15);
+                        display:flex; align-items:center;
+                        justify-content:center; font-size:1.2rem;">
+              👤
+            </div>
+            <div>
+              <p style="font-weight:600; margin:0; font-size:var(--text-sm);">
+                Carlos M.
+              </p>
+              <p style="color:var(--text-disabled); margin:0;
+                        font-size:var(--text-xs);">
+                Investidor — São Paulo, SP
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card card-neon">
+          <p style="font-size:var(--text-sm); color:var(--text-muted);
+                    font-style:italic; margin-bottom:var(--space-md);">
+            "Instalaram a máquina na minha academia sem custo algum.
+            Hoje recebo comissão todo mês e meus alunos adoram a
+            praticidade."
+          </p>
+          <div style="display:flex; align-items:center; gap:var(--space-sm);">
+            <div style="width:40px; height:40px; border-radius:50%;
+                        background:rgba(0,212,255,0.15);
+                        display:flex; align-items:center;
+                        justify-content:center; font-size:1.2rem;">
+              👤
+            </div>
+            <div>
+              <p style="font-weight:600; margin:0; font-size:var(--text-sm);">
+                Fernanda L.
+              </p>
+              <p style="color:var(--text-disabled); margin:0;
+                        font-size:var(--text-xs);">
+                Parceira — Belo Horizonte, MG
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <p style="font-size:var(--text-sm); color:var(--text-muted);
+                    font-style:italic; margin-bottom:var(--space-md);">
+            "Gerencio 8 máquinas pelo app sem precisar visitar cada
+            uma delas. A tecnologia da Box Machine é realmente de
+            outro nível."
+          </p>
+          <div style="display:flex; align-items:center; gap:var(--space-sm);">
+            <div style="width:40px; height:40px; border-radius:50%;
+                        background:rgba(0,212,255,0.15);
+                        display:flex; align-items:center;
+                        justify-content:center; font-size:1.2rem;">
+              👤
+            </div>
+            <div>
+              <p style="font-weight:600; margin:0; font-size:var(--text-sm);">
+                Ricardo T.
+              </p>
+              <p style="color:var(--text-disabled); margin:0;
+                        font-size:var(--text-xs);">
+                Operador — Curitiba, PR
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+
+        <div class="footer-brand">
+          <a href="/index.html" class="navbar-logo"
+             style="margin-bottom:var(--space-sm); display:inline-flex;">
+            Box<span>Machine</span>
+          </a>
+          <p>
+            Tecnologia em venda automática para empresas e
+            investidores em todo o Brasil.
+          </p>
+        </div>
+
+        <div>
+          <p class="footer-heading">Soluções</p>
+          <div class="footer-links">
+            <a href="/compra.html">Compra de Máquina</a>
+            <a href="/aluguel.html">Aluguel de Máquina</a>
+            <a href="/parceria.html">Cadastrar Ponto</a>
+            <a href="/download.html">Apresentação PDF</a>
+          </div>
+        </div>
+
+        <div>
+          <p class="footer-heading">Empresa</p>
+          <div class="footer-links">
+            <a href="/sobre.html">Sobre nós</a>
+            <a href="/mapa.html">Mapa de Pontos</a>
+            <a href="/faq.html">FAQ</a>
+            <a href="/contato.html">Contato</a>
+          </div>
+        </div>
+
+        <div>
+          <p class="footer-heading">Legal</p>
+          <div class="footer-links">
+            <a href="/politica.html">Política de Privacidade</a>
+            <a href="/politica.html#lgpd">LGPD</a>
+            <a href="/politica.html#cookies">Cookies</a>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2025 Box Machine. Todos os direitos reservados.</p>
+        <p>CNPJ: XX.XXX.XXX/0001-XX</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== WHATSAPP FLUTUANTE ===== -->
+  <a href="https://wa.me/5500000000000?text=Olá!%20Vim%20pelo%20site%20Box%20Machine."
+     class="whatsapp-float" target="_blank" rel="noopener"
+     aria-label="Falar no WhatsApp">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+  </a>
+
+  <!-- JS -->
+  <script src="/js/main.js"></script>
+
+</body>
+</html>
